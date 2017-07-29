@@ -1,0 +1,5 @@
+/Users/wrf_mac/Desktop/C#课程精讲/Code/Game_OneToMore/Game_OneToMore/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/wrf_mac/Desktop/C#课程精讲/Code/Game_OneToMore/Game_OneToMore/bin/Debug/Game_OneToMore.exe.mdb
+/Users/wrf_mac/Desktop/C#课程精讲/Code/Game_OneToMore/Game_OneToMore/bin/Debug/Game_OneToMore.exe
+/Users/wrf_mac/Desktop/C#课程精讲/Code/Game_OneToMore/Game_OneToMore/obj/x86/Debug/Game_OneToMore.exe
+/Users/wrf_mac/Desktop/C#课程精讲/Code/Game_OneToMore/Game_OneToMore/obj/x86/Debug/Game_OneToMore.exe.mdb
