@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Game_OneToMore
 {
@@ -7,48 +8,86 @@ namespace Game_OneToMore
 	public static class GameLogic
 	{
 		//声明Monster列表
-		static List<Monster> monsterList;
+		private static List<Monster> monsterList;
 		//声明Skill列表
-		static List<Skill> skillList;
-		static Player player;//玩家角色
+		private static List<Skill> skillList;
+		private static Player player;//玩家角色
 
 		//技能记时
-		static int[] countArray = {0, 0, 0, 0};
+		private static int[] countArray = {0, 0, 0, 0};
+
+		//判断英雄是否有效攻击
+		private static bool isEffective;
+		//关卡技数
+		private static int gamePass = 1;
 
 
 		public static void GameStart(){
 			//声明技能
 			skillList = new List<Skill> ();
 			skillList.Add(new Skill ("普攻", "造成攻击力伤害", 0));
-			skillList.Add(new Skill ("三刀流", "对单个目标连续攻击3次", 2));
+			skillList.Add(new Skill ("三刀流", "对3个目标进行普攻", 2));
 			skillList.Add(new Skill ("致命一击", "对单个目标造成4倍普攻伤害", 3));
-			skillList.Add(new Skill ("荆棘之舞", "对所以目标造成普攻伤害", 4));
+			skillList.Add(new Skill ("荆棘之舞", "对所有目标造成普攻伤害", 4));
 			skillList.Add(new Skill ("死神魔咒", "对单个目标直接10倍伤害", 8));
 
 			//声明Monster列表
-			monsterList = new List<Monster> ();
-			for (int i = 1; i <= 10; ++i) {
-				monsterList.Add (new Monster ("Monster" + i, 10, 500));
-			}
+			MonsterSet ms = MonsterSet.GetInstance ();//获取到MonsterSet的实例
+			monsterList = ms.getMonsterList (); //获取到List<Monster>实例
+			ms.NextGame ();//生成第一关的List<Monster>列表
+
 
 
 			Console.WriteLine ("*************************开始游戏********************* ");
-			SelectPlayer ();
-
+			SelectPlayer ();//选择英雄
+			Console.WriteLine ("*************************第" + gamePass +"关********************* ");
 			while (true) {
-				//选择技能
-				SelectSkill ();
+
+				SelectSkill ();//player选择技能并攻击
+				if (isEffective) {
+					Console.WriteLine ("-------------------------------------------");
+					Thread.Sleep (1000);
+					MonsterAttack ();//monster攻击
+				}
+
 				if (player.isDead ()) {
 					Console.WriteLine (">>>>>>>>>>>>>>>你已死亡，游戏结束！<<<<<<<<<<<<<<<<<");
 					break;
-				}else if(monsterList.Count == 0){
+				} else if (monsterList.Count == 0) {
 					Console.WriteLine ("*****************敌方团灭，胜利！******************");
-					break;
+
+					bool isOut = false;//判断是否退出游戏
+					while (true) {
+						Console.WriteLine ("是否继续下一关（ Y/N ）：");
+						string isContinue = Console.ReadLine ();
+						if (isContinue.Equals ("Y")) {
+							ms.NextGame ();
+							Console.WriteLine ("*************************第" + (++gamePass) +"关********************* ");
+							break;
+						} else if (isContinue.Equals ("N")) {
+							isOut = true;
+							break;
+						} else {
+							Console.WriteLine ("输入错误，请重新输入：");
+						}
+
+
+					}
+					if (isOut) {
+						break;
+					}
 				}
 
 			}
 		}
-
+		//monster攻击
+		private static void MonsterAttack(){
+			foreach(Monster m in monsterList){
+				m.E_Attack += player.F_Attack;
+				m.StartAttact (skillList[0]);
+				m.E_Attack -= player.F_Attack;
+			}
+		}
 
 		//选择英雄
 		private static void SelectPlayer(){
@@ -173,6 +212,7 @@ namespace Game_OneToMore
 			if (countArray[3] > 0) {
 				--countArray[3];
 			}
+			isEffective = true;
 		}
 
 		//三刀流
@@ -180,10 +220,11 @@ namespace Game_OneToMore
 			//判断技能是否冷却完成
 			if (countArray[0] > 0) {
 				Console.WriteLine ("Q技能冷却中，无法释放，剩余时间：" + countArray[0]);
+				isEffective = false;
 				return;
 			}
 			//添加事件响应对象
-			for (int i = 0; i < 3; ++i) {
+			for (int i = 0; i < (3 < monsterList.Count ? 3 : monsterList.Count); ++i) {
 				player.E_Attack += monsterList [i].F_Attack;
 			}
 			//执行事件
@@ -205,6 +246,7 @@ namespace Game_OneToMore
 			if (countArray[3] > 0) {
 				--countArray[3];
 			}
+			isEffective = true;
 		}
 
 		//致命一击
@@ -212,6 +254,7 @@ namespace Game_OneToMore
 			//判断技能是否冷却完成
 			if (countArray[1] > 0) {
 				Console.WriteLine ("W技能冷却中，无法释放，剩余时间：" + countArray[1]);
+				isEffective = false;
 				return;
 			}
 
@@ -234,6 +277,8 @@ namespace Game_OneToMore
 			if (countArray[3] > 0) {
 				--countArray[3];
 			}
+
+			isEffective = true;
 		}
 
 		//荆棘之舞
@@ -241,6 +286,7 @@ namespace Game_OneToMore
 			//判断技能是否冷却完成
 			if (countArray[2] > 0) {
 				Console.WriteLine ("E技能冷却中，无法释放，剩余时间：" + countArray[2]);
+				isEffective = false;
 				return;
 			}
 
@@ -265,12 +311,15 @@ namespace Game_OneToMore
 			if (countArray[3] > 0) {
 				--countArray[3];
 			}
+
+			isEffective = true;
 		}
 		//死神魔咒
 		private static void Ordinary_R(){
 			//判断技能是否冷却完成
 			if (countArray[3] > 0) {
 				Console.WriteLine ("R技能冷却中，无法释放，剩余时间：" + countArray[3]);
+				isEffective = false;
 				return;
 			}
 
@@ -295,6 +344,8 @@ namespace Game_OneToMore
 			if (countArray[2] > 0) {
 				--countArray[2];
 			}
+
+			isEffective = true;
 		}
 
 		//Monster死亡时，移除List中的monster,该方法给Monster的F_Attack调用

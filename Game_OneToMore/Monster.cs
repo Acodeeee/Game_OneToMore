@@ -29,10 +29,12 @@ namespace Game_OneToMore
 
 		//响应Player的攻击事件
 		public override void F_Attack (object o, EventArgs e){
-			Thread.Sleep(1000);
+			Thread.Sleep(800);
 			if (o is Player && e is Skill && e != null) {
 				Player p = (Player)o;
 				Skill s = (Skill)e;
+
+
 				Random rand = new Random ();
 				//是否暴击
 				bool isCrit = rand.Next (0, 100) <= p.ProOfCrit * 100;

@@ -80,10 +80,11 @@ namespace Game_OneToMore
 
 		//响应Monster的攻击指令
 		public override void F_Attack (object o, EventArgs e){
-			Thread.Sleep(1000);
+			Thread.Sleep(500);
 			if (o is Monster && e is Skill && e != null) {
 				Monster m = (Monster)o;
 				Skill s = (Skill)e;
+
 				HP -= m.Attack;
 				Console.WriteLine (m.Name + " 使用 " + s.Name + " 攻击 " + Name + "，伤害：" + m.Attack);
 				Console.WriteLine (Name + "剩余HP:" + HP);

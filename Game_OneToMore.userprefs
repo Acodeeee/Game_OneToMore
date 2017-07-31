@@ -5,9 +5,10 @@
       <File FileName="Game_OneToMore/Player.cs" Line="1" Column="1" />
       <File FileName="Game_OneToMore/Equipment.cs" Line="1" Column="1" />
       <File FileName="Game_OneToMore/Person.cs" Line="1" Column="1" />
-      <File FileName="Game_OneToMore/Program.cs" Line="4" Column="4" />
+      <File FileName="Game_OneToMore/Program.cs" Line="27" Column="27" />
       <File FileName="Game_OneToMore/Skill.cs" Line="1" Column="1" />
-      <File FileName="Game_OneToMore/Monster.cs" Line="1" Column="1" />
+      <File FileName="Game_OneToMore/Monster.cs" Line="37" Column="37" />
+      <File FileName="Game_OneToMore/GameLogic.cs" Line="20" Column="20" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
