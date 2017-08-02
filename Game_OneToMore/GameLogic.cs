@@ -9,6 +9,7 @@ namespace Game_OneToMore
 	{
 		//声明Monster列表
 		private static List<Monster> monsterList;
+
 		//声明Skill列表
 		private static List<Skill> skillList;
 		private static Player player;//玩家角色
@@ -18,7 +19,7 @@ namespace Game_OneToMore
 
 		//判断英雄是否有效攻击
 		private static bool isEffective;
-		//关卡技数
+		//关卡计数
 		private static int gamePass = 1;
 
 
@@ -31,16 +32,20 @@ namespace Game_OneToMore
 			skillList.Add(new Skill ("荆棘之舞", "对所有目标造成普攻伤害", 4));
 			skillList.Add(new Skill ("死神魔咒", "对单个目标直接10倍伤害", 8));
 
-			//声明Monster列表
+			//获取Monster列表
 			MonsterSet ms = MonsterSet.GetInstance ();//获取到MonsterSet的实例
 			monsterList = ms.getMonsterList (); //获取到List<Monster>实例
 			ms.NextGame ();//生成第一关的List<Monster>列表
 
 
-
 			Console.WriteLine ("*************************开始游戏********************* ");
 			SelectPlayer ();//选择英雄
 			Console.WriteLine ("*************************第" + gamePass +"关********************* ");
+
+			Console.WriteLine ("你的金钱为：" + player.Money + "金币");
+			//进入商店购物
+			Shopping ();
+
 			while (true) {
 
 				SelectSkill ();//player选择技能并攻击
@@ -63,6 +68,8 @@ namespace Game_OneToMore
 						if (isContinue.Equals ("Y")) {
 							ms.NextGame ();
 							Console.WriteLine ("*************************第" + (++gamePass) +"关********************* ");
+							Console.WriteLine ("你的金钱为：" + player.Money + "金币");
+							Shopping ();
 							break;
 						} else if (isContinue.Equals ("N")) {
 							isOut = true;
@@ -70,7 +77,6 @@ namespace Game_OneToMore
 						} else {
 							Console.WriteLine ("输入错误，请重新输入：");
 						}
-
 
 					}
 					if (isOut) {
@@ -80,6 +86,32 @@ namespace Game_OneToMore
 
 			}
 		}
+		//商店购买装备
+		private static void Shopping(){
+			while (true) {
+				bool isOut = false;
+				int select;//select作为Show的输出参数，表示用户的装备选择
+				EquipmentSet es = EquipmentSet.GetInstance ();
+				es.Show (out select);//展示装备
+				//检测select的合法性
+				if (select > 0 && select <= es.Count + 1) {
+					//通过select（ID）得到Equipment的实例
+					Equipment e = es.GetEquipmentById (select);
+					if (e != null) {
+						isOut = player.BuyEquipment (e);
+					} else {
+						Console.WriteLine ("未成功购买装备");
+						isOut = false;
+					}
+				}else if(select == 0){
+					return;
+				}
+				if (isOut) {
+					break;
+				}
+			}
+		}
+
 		//monster攻击
 		private static void MonsterAttack(){
 			foreach(Monster m in monsterList){
@@ -92,11 +124,11 @@ namespace Game_OneToMore
 		//选择英雄
 		private static void SelectPlayer(){
 			//声明Player,上，中，野，AD，辅
-			Player TOP = new Player ("刀妹", 100, 4000);
-			Player MID = new Player ("劫", 150, 2500);
-			Player JGL = new Player ("寡妇", 150, 2000);
-			Player ADC = new Player ("金克丝", 200, 2000);
-			Player SUP = new Player ("风女", 50 ,2000);
+			Player TOP = new Player ("刀妹", 200, 4000);
+			Player MID = new Player ("劫", 250, 2500);
+			Player JGL = new Player ("寡妇", 250, 2000);
+			Player ADC = new Player ("金克丝", 300, 2000);
+			Player SUP = new Player ("风女", 100 ,2000);
 			while (true) {
 				bool isOut;
 				Console.WriteLine ("\n1）.刀妹  2）.劫  3）.寡妇  4）.金克丝  5）.风女  \n请选择英雄：");

@@ -42,6 +42,9 @@
     <Compile Include="Monster.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="MonsterSet.cs" />
+    <Compile Include="EquipmentSet.cs" />
+    <Compile Include="PlayerSet.cs" />
+    <Compile Include="SkillLogic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,24 +1,4 @@
-﻿//
-//  Monster.cs
-//
-//  Author:
-//       wrf_mac <>
-//
-//  Copyright (c) 2017 wrf_mac
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
+﻿using System;
 using System.Threading;
 
 namespace Game_OneToMore
@@ -37,10 +17,10 @@ namespace Game_OneToMore
 
 				Random rand = new Random ();
 				//是否暴击
-				bool isCrit = rand.Next (0, 100) <= p.ProOfCrit * 100;
+				bool isCrit = (rand.Next (0, 100) <= p.ProOfCrit);
 				if (isCrit) {
 					//暴击攻击
-					int force = Convert.ToInt32( p.Attack * (1.0f + p.ProOfCrit));
+					int force = Convert.ToInt32( p.Attack * (1.0f + p.ProOfCrit/100.0f));
 					HP -= force;
 					Console.WriteLine (p.Name + " 使用 " + s.Name + " 攻击 " + Name + "，产生暴击，暴击伤害：" + force);
 				} else {
@@ -51,7 +31,12 @@ namespace Game_OneToMore
 				Console.WriteLine (Name + "剩余HP:" + HP);
 				//Monster死亡加钱
 				if (isDead ()) {
-					p.Money += 100;
+					//小兵加100金币，大炮兵加200金币
+					if (this.Name.Contains ("小兵")) {
+						p.Money += 100;
+					} else {
+						p.Money += 200;
+					}
 					GameLogic.RemoveMonster (this);
 				}
 

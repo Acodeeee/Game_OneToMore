@@ -28,6 +28,8 @@ namespace Game_OneToMore
 {
 	public class Player : Person
 	{
+		//技能List
+		public List<Skill> skillList;
 		//装备List
 		List<Equipment> eqList;
 		//金钱
@@ -48,15 +50,17 @@ namespace Game_OneToMore
 
 
 		public Player (string name, int attack, int hp) : base(name, attack, hp){
+			skillList = new List<Skill>();
 			eqList = new List<Equipment>();
+			Money = 500;
 			proOfCrit = 0.3f;
 		}
 
 		//买装备
-		public void BuyEquipment(Equipment e){
+		public bool BuyEquipment(Equipment e){
 			if(this.Money < e.Price){
 				Console.WriteLine ("金钱不够，无法购买！");
-				return;
+				return false;
 			}
 			//改变自身属性
 			this.Money -= e.Price;
@@ -65,6 +69,7 @@ namespace Game_OneToMore
 			this.ProOfCrit += e.ProOfCrit;
 			Console.WriteLine ("购买" + e.Name + "成功");
 			eqList.Add (e);
+			return true;
 		}
 		//卖装备，以原价格的50%出售
 		public void SellEquipment(Equipment e){
