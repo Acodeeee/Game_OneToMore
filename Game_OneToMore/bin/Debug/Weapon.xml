@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root>
+	<Weapon>
+		<Name>符文长剑</Name>
+		<Price>350</Price>NCl
+		<Attack>10</Attack>
+		<ProOfCrit>0</ProOfCrit>
+	</Weapon>
+	<Weapon>
+		<Name>死刑宣告</Name>
+		<Price>800</Price>
+		<Attack>15</Attack>
+		<ProOfCrit>10</ProOfCrit>
+	</Weapon>
+	<Weapon>
+		<Name>暴风之剑</Name>
+		<Price>1300</Price>
+		<Attack>40</Attack>
+		<ProOfCrit>0</ProOfCrit>
+	</Weapon>
+	<Weapon>
+		<Name>无尽之刃</Name>
+		<Price>3400</Price>
+		<Attack>70</Attack>
+		<ProOfCrit>20</ProOfCrit>
+	</Weapon>
+</Root>

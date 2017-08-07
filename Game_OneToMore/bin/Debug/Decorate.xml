@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root>
+	<Decorate>
+		<Name>黑暗之戒</Name>
+		<Price>400</Price>
+		<HP>100</HP>
+		<MP>50</MP>
+	</Decorate>
+	<Decorate>
+		<Name>燃烧宝石</Name>
+		<Price>800</Price>
+		<HP>200</HP>
+		<MP>0</MP>
+	</Decorate>
+	<Decorate>
+		<Name>催化魔石</Name>
+		<Price>1100</Price>
+		<HP>225</HP>
+		<MP>300</MP>
+	</Decorate>
+	<Decorate>
+		<Name>适应头盔</Name>
+		<Price>2800</Price>
+		<HP>500</HP>
+		<MP>400</MP>
+	</Decorate>
+</Root>

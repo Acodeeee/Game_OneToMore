@@ -1,32 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Game_OneToMore
 {
 	//存储equipment的List类，单例模式
 	public class EquipmentSet
 	{
-		private readonly List<Equipment> equipmentList;
-		public int Count{get{ return equipmentList.Count;}}
+		private readonly List<Weapon> weaponList;
+		private readonly List<Clothes> clothsList;
+		private readonly List<Decorate> decorateList;
+		private readonly List<Medicine> medicineList;
+
+		public ArrayList equipmentList;
+
+		public int Count{
+			get{ 
+				return weaponList.Count + clothsList.Count + decorateList.Count + medicineList.Count;
+			}
+		}
 
 		private EquipmentSet ()
 		{
-			equipmentList = new List<Equipment> ();
+			//得到装备xml的数据
+			weaponList = AnalyseXml.GetWeaponList ();
+			clothsList = AnalyseXml.GetClothesList ();
+			decorateList = AnalyseXml.GetDecorateList ();
+			medicineList = AnalyseXml.GetMedicineList ();
 
-			//初始化装备
-			//string name,int price, int attack, int hp, int proOfCrit
-			equipmentList.Add (new Equipment("长剑", 350, 10, 0, 0));
-			equipmentList.Add (new Equipment("多兰之盾", 400, 0, 150, 0));
-			equipmentList.Add (new Equipment("多兰之刃", 450, 8, 80, 0));
-			equipmentList.Add (new Equipment("死刑宣告", 800, 15, 0, 10));
-			equipmentList.Add (new Equipment("灵巧披风", 800, 0, 0, 20));
-			equipmentList.Add (new Equipment("燃烧宝石", 800, 0, 200, 10));
-			equipmentList.Add (new Equipment("巨人腰带", 1000, 0, 380, 0));
-			equipmentList.Add (new Equipment("提亚马特", 1200, 20, 200, 0));
-			equipmentList.Add (new Equipment("暴风之剑", 1300, 40, 0, 0));
-			equipmentList.Add (new Equipment("斯特拉克的挑战护手", 2600, 50, 400, 0));
-			equipmentList.Add (new Equipment("狂徒铠甲", 2850, 0, 800, 0));
-			equipmentList.Add (new Equipment("无尽之刃", 3400, 70, 0, 20));
+			//把4种装备的List存到ArrayList中
+			equipmentList = new ArrayList ();
+			equipmentList.Add (weaponList);		//0
+			equipmentList.Add (clothsList);		//1
+			equipmentList.Add (decorateList);	//2
+			equipmentList.Add (medicineList);	//3
 		}
 
 		private static class Handle{
@@ -40,12 +47,30 @@ namespace Game_OneToMore
 		//遍历List
 		public void Show(out int select){
 			Console.WriteLine ("******************************商店******************************");
-			foreach(Equipment e in equipmentList){
+			//展示Weapon
+			Console.WriteLine ("************************* 武器 ************************");
+			foreach(Weapon e in (equipmentList[0] as List<Weapon>)){
 				Console.WriteLine (e);
 			}
+			//展示Clothes
+			Console.WriteLine ("************************* 衣服 ************************");
+			foreach(Clothes e in (equipmentList[1] as List<Clothes>)){
+				Console.WriteLine (e);
+			}
+			//展示Decorate
+			Console.WriteLine ("************************* 装饰品 ************************");
+			foreach(Decorate e in (equipmentList[2] as List<Decorate>)){
+				Console.WriteLine (e);
+			}
+			//展示Medicine
+			Console.WriteLine ("************************* 药品 ************************");
+			foreach(Medicine e in (equipmentList[3] as List<Medicine>)){
+				Console.WriteLine (e);
+			}
+
 			Console.WriteLine ("***************************************************************");
 			Console.WriteLine ("请输入ID进行购买(0退出商店)：");
-			//如果输入不为数字则将selece赋值为0
+			//如果输入不为数字则将selece赋值为-1
 			try{
 				select = int.Parse( Console.ReadLine ());
 			}catch{
@@ -54,13 +79,49 @@ namespace Game_OneToMore
 		}
 		//根据ID返回Equipment的实例
 		public Equipment GetEquipmentById(int id){
-			foreach (Equipment e in equipmentList) {
-				if (e.ID == id) {
-					return e;
+			//得到id所属物品在ArrayList中的下标
+			int i = id/1000 - 1;
+
+			//确定Equipment的具体类型
+			switch (i) {
+			case 0:
+				foreach (Weapon e in weaponList) {
+					if (e.ID == id) {
+						return e;
+					}
 				}
+				return null;
+
+			case 1:
+				foreach (Clothes e in clothsList) {
+					if (e.ID == id) {
+						return e;
+					}
+				}
+				return null;
+
+			case 2:
+				foreach (Decorate e in decorateList) {
+					if (e.ID == id) {
+						return e;
+					}
+				}
+				return null;
+
+			case 3:
+				foreach (Medicine e in medicineList) {
+					if (e.ID == id) {
+						return e;
+					}
+				}
+				return null;
+
+			default:
+				return null;
+
 			}
-			return null;
 		}
+			
 
 	}
 }

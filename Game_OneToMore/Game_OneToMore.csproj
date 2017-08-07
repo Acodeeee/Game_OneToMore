@@ -31,6 +31,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -45,6 +47,13 @@
     <Compile Include="EquipmentSet.cs" />
     <Compile Include="PlayerSet.cs" />
     <Compile Include="SkillLogic.cs" />
+    <Compile Include="Bag.cs" />
+    <Compile Include="EquipmentLogic.cs" />
+    <Compile Include="Weapon.cs" />
+    <Compile Include="Clothes.cs" />
+    <Compile Include="Decorate.cs" />
+    <Compile Include="Medicine.cs" />
+    <Compile Include="AnalyseXml.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

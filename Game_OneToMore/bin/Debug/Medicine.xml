@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root>
+	<Medicine>
+		<Name>生命药水</Name>
+		<Price>50</Price>
+		<HP>150</HP>
+		<MP>0</MP>
+	</Medicine>
+	<Medicine>
+		<Name>魔法药水</Name>
+		<Price>50</Price>
+		<HP>0</HP>
+		<MP>100</MP>
+	</Medicine>
+	<Medicine>
+		<Name>腐败药水</Name>
+		<Price>500</Price>
+		<HP>400</HP>
+		<MP>300</MP>
+	</Medicine>
+	
+</Root>

@@ -1,20 +1,29 @@
-﻿<Properties StartupItem="Game_OneToMore/Game_OneToMore.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Game_OneToMore/GameLogic.cs">
+﻿<Properties StartupConfiguration="{973AC243-4BA5-412E-94E5-3E6440A23A4A}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Game_OneToMore/Player.cs">
     <Files>
-      <File FileName="Game_OneToMore/GameLogic.cs" Line="50" Column="50" />
-      <File FileName="Game_OneToMore/PlayerSet.cs" Line="4" Column="4" />
-      <File FileName="Game_OneToMore/Skill.cs" Line="1" Column="1" />
-      <File FileName="Game_OneToMore/SkillLogic.cs" Line="4" Column="4" />
-      <File FileName="Game_OneToMore/MonsterSet.cs" Line="26" Column="26" />
-      <File FileName="Game_OneToMore/EquipmentSet.cs" Line="21" Column="21" />
-      <File FileName="Game_OneToMore/Player.cs" Line="1" Column="1" />
-      <File FileName="Game_OneToMore/Monster.cs" Line="26" Column="26" />
-      <File FileName="Game_OneToMore/Equipment.cs" Line="1" Column="1" />
+      <File FileName="Game_OneToMore/Player.cs" Line="140" Column="21" />
+      <File FileName="Game_OneToMore/GameLogic.cs" Line="49" Column="24" />
+      <File FileName="Game_OneToMore/Bag.cs" Line="143" Column="34" />
+      <File FileName="Game_OneToMore/MonsterSet.cs" Line="34" Column="15" />
+      <File FileName="Game_OneToMore/Program.cs" Line="10" Column="27" />
+      <File FileName="Game_OneToMore/EquipmentLogic.cs" Line="63" Column="22" />
+      <File FileName="Game_OneToMore/Weapon.cs" Line="25" Column="4" />
+      <File FileName="Game_OneToMore/Clothes.cs" Line="43" Column="130" />
+      <File FileName="Game_OneToMore/Decorate.cs" Line="24" Column="165" />
+      <File FileName="Game_OneToMore/Medicine.cs" Line="15" Column="3" />
+      <File FileName="Game_OneToMore/Skill.cs" Line="8" Column="35" />
+      <File FileName="Game_OneToMore/PlayerSet.cs" Line="27" Column="1" />
+      <File FileName="Game_OneToMore/Person.cs" Line="1" Column="1" />
+      <File FileName="Game_OneToMore/Monster.cs" Line="1" Column="1" />
+      <File FileName="Game_OneToMore/Equipment.cs" Line="63" Column="44" />
+      <File FileName="Game_OneToMore/AnalyseXml.cs" Line="53" Column="53" />
     </Files>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Game__OneToMore PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
 </Properties>

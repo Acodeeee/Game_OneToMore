@@ -27,10 +27,10 @@ namespace Game_OneToMore
 			//声明技能
 			skillList = new List<Skill> ();
 			skillList.Add(new Skill ("普攻", "造成攻击力伤害", 0));
-			skillList.Add(new Skill ("三刀流", "对3个目标进行普攻", 2));
-			skillList.Add(new Skill ("致命一击", "对单个目标造成4倍普攻伤害", 3));
-			skillList.Add(new Skill ("荆棘之舞", "对所有目标造成普攻伤害", 4));
-			skillList.Add(new Skill ("死神魔咒", "对单个目标直接10倍伤害", 8));
+			skillList.Add(new Skill ("三刀流", "对3个目标进行普攻", 2, 20));
+			skillList.Add(new Skill ("致命一击", "对单个目标造成4倍普攻伤害", 3, 30));
+			skillList.Add(new Skill ("荆棘之舞", "对所有目标造成普攻伤害", 4, 40));
+			skillList.Add(new Skill ("死神魔咒", "对单个目标直接10倍伤害", 8, 50));
 
 			//获取Monster列表
 			MonsterSet ms = MonsterSet.GetInstance ();//获取到MonsterSet的实例
@@ -38,16 +38,17 @@ namespace Game_OneToMore
 			ms.NextGame ();//生成第一关的List<Monster>列表
 
 
-			Console.WriteLine ("*************************开始游戏********************* ");
+			Console.WriteLine ("*************************欢迎来到召唤师峡谷********************* ");
+			UserHelp();
 			SelectPlayer ();//选择英雄
 			Console.WriteLine ("*************************第" + gamePass +"关********************* ");
 
-			Console.WriteLine ("你的金钱为：" + player.Money + "金币");
-			//进入商店购物
-			Shopping ();
+			//输出当前英雄信息
+			Console.WriteLine (player);
+			//进入商店购物或者进入背包
+			EquipmentLogic.ShopOrBag(player);
 
 			while (true) {
-
 				SelectSkill ();//player选择技能并攻击
 				if (isEffective) {
 					Console.WriteLine ("-------------------------------------------");
@@ -68,8 +69,13 @@ namespace Game_OneToMore
 						if (isContinue.Equals ("Y")) {
 							ms.NextGame ();
 							Console.WriteLine ("*************************第" + (++gamePass) +"关********************* ");
-							Console.WriteLine ("你的金钱为：" + player.Money + "金币");
-							Shopping ();
+							//技能冷却归零
+							for (int i = 0; i < countArray.Length; ++i) {
+								countArray[i] = 0;
+							}
+							//输出当前英雄信息
+							Console.WriteLine (player);
+							EquipmentLogic.ShopOrBag(player);
 							break;
 						} else if (isContinue.Equals ("N")) {
 							isOut = true;
@@ -86,30 +92,60 @@ namespace Game_OneToMore
 
 			}
 		}
-		//商店购买装备
-		private static void Shopping(){
-			while (true) {
-				bool isOut = false;
-				int select;//select作为Show的输出参数，表示用户的装备选择
-				EquipmentSet es = EquipmentSet.GetInstance ();
-				es.Show (out select);//展示装备
-				//检测select的合法性
-				if (select > 0 && select <= es.Count + 1) {
-					//通过select（ID）得到Equipment的实例
-					Equipment e = es.GetEquipmentById (select);
-					if (e != null) {
-						isOut = player.BuyEquipment (e);
-					} else {
-						Console.WriteLine ("未成功购买装备");
-						isOut = false;
-					}
-				}else if(select == 0){
-					return;
-				}
-				if (isOut) {
-					break;
+		//帮助手册
+		private static void UserHelp() {
+			string str = "亲爱的召唤师，欢迎来到新手训练营。\n" +
+				"进入游戏您将拥有一定的金钱，您可以在商店中挥霍您的金钱，购买您的英雄所需的装备。\n" +
+				"另外，您可以进入锻造炉升级背包中的装备，当然，您还可以将两件相同属性的装备进行熔合，但您的药品不能进行升级或熔合。\n" +
+				"在战斗中，您的英雄拥有普攻和4个技能，技能释放需要冷却时间和蓝量，请注意控制您的蓝量。当然，您可以在战斗中通过药品随时补给您的血量和蓝量。\n" +
+				"通过击杀敌军，您可以获得相应的金钱。每一关都会增加难度，当然，您得保持存活，祝您好运。每一关开始前，您都有进入商店购买装备和进入锻造炉升级您的英雄装备的机会。\n" +
+				"碾碎他们，" +
+				"或者被他们碾碎吧！\n";
+			Console.WriteLine("1.进入游戏  2.游戏帮助  请输入：");
+			while (true)
+			{
+				switch (Console.ReadLine())
+				{
+					case "1":
+						return;
+
+					case "2":
+						foreach (char c in str) {
+							Random rand = new Random();
+							int sTime = rand.Next(100,400);
+							Console.Write(c);
+							Thread.Sleep(sTime);
+						}
+						Console.WriteLine("（进入游戏请输入1）");
+						break;
+
+					default:
+						Console.WriteLine("输入错误，请重新输入：");
+						break;
 				}
 			}
+
+		}
+
+		//更新英雄属性,装备升级后增加英雄的属性
+		public static void UpdateInfo(Equipment e){
+				switch (e.Type) { 
+				case EquipmentType.WEAPON:
+					player.Attack += (e as Weapon).Attack / 2;
+					break;
+
+				case EquipmentType.CLOTHES:
+					player.HP += (e as Clothes).HP / 2;
+				
+					break;
+
+				case EquipmentType.DECORATE:
+					player.HP += (e as Decorate).HP / 2;
+					player.MP += (e as Decorate).MP / 2;
+
+					break;
+
+				}
 		}
 
 		//monster攻击
@@ -124,14 +160,14 @@ namespace Game_OneToMore
 		//选择英雄
 		private static void SelectPlayer(){
 			//声明Player,上，中，野，AD，辅
-			Player TOP = new Player ("刀妹", 200, 4000);
-			Player MID = new Player ("劫", 250, 2500);
-			Player JGL = new Player ("寡妇", 250, 2000);
-			Player ADC = new Player ("金克丝", 300, 2000);
-			Player SUP = new Player ("风女", 100 ,2000);
+			Player TOP = new Player ("刀锋意志", 200, 4000);
+			Player MID = new Player ("影流之主", 250, 2500);
+			Player JGL = new Player ("迅捷斥候", 250, 2300);
+			Player ADC = new Player ("暴走萝莉", 300, 2000);
+			Player SUP = new Player ("风暴之怒", 100 ,2600);
 			while (true) {
 				bool isOut;
-				Console.WriteLine ("\n1）.刀妹  2）.劫  3）.寡妇  4）.金克丝  5）.风女  \n请选择英雄：");
+				Console.WriteLine ("\n" + "1." + TOP + "2." + MID + "3." + JGL + "4." + ADC + "5." + SUP +"\n请选择英雄：");
 				switch (Console.ReadLine ()) {
 				case "1":
 					player = TOP;
@@ -172,19 +208,23 @@ namespace Game_OneToMore
 		//选择技能攻击
 		private static void SelectSkill(){
 			string[] ss = new string[]{ "A","Q", "W", "E", "R" };
+			//输出当前英雄信息
+			Console.WriteLine (player);
 			int i = 0;
+			//遍历技能展示
 			foreach (Skill s in skillList) {
 				if (i == 0) {
 					Console.WriteLine (ss [i++] + ")." + s.Name + "  ");
 				} else {
-					Console.WriteLine (ss [i] + ")." + s.Name + "---> "+ s.Describe + "(冷却时间：" + countArray [i - 1] + "s) ");
+					Console.WriteLine (ss [i] + ")." + s.Name + "---> "+ s.Describe + "，需要蓝量：" + s.NeedMP + "( 冷却时间：" + countArray [i - 1] + "s)");
 					++i;
 				}
 			}
+			Console.WriteLine("1.使用药品：");
 
 			Console.WriteLine ("\n请选择你要释放的技能：");
 			while (true) {
-				bool isOut;
+				bool isOut = false;
 				switch (Console.ReadLine ()) {
 				case "A":
 					Ordinary ();
@@ -210,6 +250,11 @@ namespace Game_OneToMore
 					Ordinary_R ();
 					isOut = true;
 					break;
+				case "1":
+					//使用药品
+					UseMedicine();
+					isOut = true;
+					break;
 
 				default:
 					Console.WriteLine ("技能释放错误，请重新释放！");
@@ -219,6 +264,37 @@ namespace Game_OneToMore
 				}
 				if (isOut || monsterList.Count == 0) {
 					break;
+				}
+			}
+		}
+		//使用药品
+		private static void UseMedicine() { 
+			//打印出药品
+			foreach (Equipment e in player.bag.equipmentList) {
+				if (e.Type == EquipmentType.MEDICINE) { 
+					Console.WriteLine(e + "  数量：" + (e as Medicine).Count);
+				}			
+			}
+			bool isOut = false;
+			while (!isOut)
+			{
+				Console.WriteLine("请输入需要使用的药品ID（0退出)：");
+				string sID = Console.ReadLine();
+				foreach (Equipment e in player.bag.equipmentList)
+				{
+					//类型为药品，且输入ID正确就使用药品
+					if (e.Type == EquipmentType.MEDICINE && sID == e.ID.ToString())
+					{
+						player.EatMedicine(e as Medicine);
+						return;
+					}
+					else if (sID == 0.ToString())
+					{
+						isOut = true;
+					}
+				}
+				if(!isOut) { 
+					Console.WriteLine("输入错误，请重新输入！");
 				}
 			}
 		}
@@ -255,6 +331,12 @@ namespace Game_OneToMore
 				isEffective = false;
 				return;
 			}
+			//判断蓝量是否足够
+			if (player.MP < skillList[1].NeedMP) {
+				Console.WriteLine ("释放Q技能蓝量不足，无法释放，剩余蓝量：" + player.MP);
+				isEffective = false;
+				return;
+			}
 			//添加事件响应对象
 			for (int i = 0; i < (3 < monsterList.Count ? 3 : monsterList.Count); ++i) {
 				player.E_Attack += monsterList [i].F_Attack;
@@ -266,6 +348,9 @@ namespace Game_OneToMore
 				player.E_Attack -= monsterList [i].F_Attack;
 
 			}
+
+			//减蓝量
+			player.MP -= skillList [1].NeedMP;
 
 			//技能冷却记时
 			countArray[0] = skillList [1].Count;
@@ -289,6 +374,12 @@ namespace Game_OneToMore
 				isEffective = false;
 				return;
 			}
+			//判断蓝量是否足够
+			if (player.MP < skillList [2].NeedMP) {
+				Console.WriteLine ("释放W技能蓝量不足，无法释放，剩余蓝量：" + player.MP);
+				isEffective = false;
+				return;
+			}
 
 			player.E_Attack += monsterList [0].F_Attack;
 			player.Attack *= 3; 
@@ -309,6 +400,8 @@ namespace Game_OneToMore
 			if (countArray[3] > 0) {
 				--countArray[3];
 			}
+			//减蓝量
+			player.MP -= skillList [2].NeedMP;
 
 			isEffective = true;
 		}
@@ -318,6 +411,12 @@ namespace Game_OneToMore
 			//判断技能是否冷却完成
 			if (countArray[2] > 0) {
 				Console.WriteLine ("E技能冷却中，无法释放，剩余时间：" + countArray[2]);
+				isEffective = false;
+				return;
+			}
+			//判断蓝量是否足够
+			if (player.MP < skillList [3].NeedMP) {
+				Console.WriteLine ("释放E技能蓝量不足，无法释放，剩余蓝量：" + player.MP);
 				isEffective = false;
 				return;
 			}
@@ -344,6 +443,9 @@ namespace Game_OneToMore
 				--countArray[3];
 			}
 
+			//减蓝量
+			player.MP -= skillList [3].NeedMP;
+
 			isEffective = true;
 		}
 		//死神魔咒
@@ -351,6 +453,13 @@ namespace Game_OneToMore
 			//判断技能是否冷却完成
 			if (countArray[3] > 0) {
 				Console.WriteLine ("R技能冷却中，无法释放，剩余时间：" + countArray[3]);
+				isEffective = false;
+				return;
+			}
+
+			//判断蓝量是否足够
+			if (player.MP < skillList [4].NeedMP) {
+				Console.WriteLine ("释放E技能蓝量不足，无法释放，剩余蓝量：" + player.MP);
 				isEffective = false;
 				return;
 			}
@@ -376,6 +485,9 @@ namespace Game_OneToMore
 			if (countArray[2] > 0) {
 				--countArray[2];
 			}
+
+			//减蓝量
+			player.MP -= skillList [4].NeedMP;
 
 			isEffective = true;
 		}

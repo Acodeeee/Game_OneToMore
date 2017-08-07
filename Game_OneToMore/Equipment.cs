@@ -1,64 +1,67 @@
-﻿//
-//  Equipment.cs
-using System;
+﻿using System;
 
 namespace Game_OneToMore
 {
+	public enum EquipmentType{
+		WEAPON,
+		CLOTHES,
+		DECORATE,
+		MEDICINE
+	}
 	//装备类
-	public class Equipment
+	public abstract class Equipment
 	{
-		public int ID{ get;}
+		public int ID{ get; set;}
+
+		public EquipmentType Type{ get; set;}
+
+		//装备等级
+		public int Rank{ get; set;}
 
 		public string Name{ get; set;}
 
 		//价格
 		public int Price{ get; set;}
 
-		//武器攻击力
-		public int Attack{ get; set;}
 
-		//生命值
-		public int HP{ get; set;}
+		//给不同类型装备赋值
+		private static int NowID_W = 1000;
+		private static int NowID_C = 2000;
+		private static int NowID_D = 3000;
+		private static int NowID_M = 4000;
 
-		//暴击率
-		private int proOfCrit;
-		public int ProOfCrit { 
-			get{ return proOfCrit; }
-			private set { 
-				//暴击率在0 ～ 20%之间
-				if (value > 0 && value < 100) {
-					proOfCrit = value;
-				} else {
-					proOfCrit = 0;
-				}
-			}
-		}
 
-		private static int NowID = 0;
 
-		public Equipment (string name,int price, int attack, int hp, int proOfCrit)
+		protected Equipment (EquipmentType type, string name, int price)
 		{
-			ID = ++NowID;
+			switch (type) {
+			case EquipmentType.WEAPON:
+				ID = ++NowID_W;
+				break;
+
+			case EquipmentType.CLOTHES:
+				ID = ++NowID_C;
+				break;
+
+			case EquipmentType.DECORATE:
+				ID = ++NowID_D;
+				break;
+
+			case EquipmentType.MEDICINE:
+				ID = ++NowID_M;
+				break;
+			}
+			Rank = 1;
+			Type = type;
 			Name = name;
 			Price = price;
-			Attack = attack;
-			HP = hp;
-			ProOfCrit = proOfCrit;
 		}
-		public override string ToString ()
-		{
-			string s = "ID: " + this.ID + "  名字: " + this.Name + "  价格：" + this.Price;
-			if (this.Attack != 0) {
-				s += "  攻击力：" + this.Attack;
-			}
-			if (this.HP != 0) {
-				s += "  生命值：" + this.HP;
-			}
-			if (proOfCrit != 0) {
-				s += " 暴击率：" + this.ProOfCrit + "%";
-			}
-			return s;
-		}
+
+
+
+		//克隆当前的实例返回，用于加入背包操作
+		public abstract Equipment Clone (int id);
+			
 	}
 }
 

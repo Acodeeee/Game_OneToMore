@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root>
+	<Clothes>
+		<Name>灵巧披风</Name>
+		<Price>800</Price>
+		<HP>200</HP>
+	</Clothes>
+	<Clothes>
+		<Name>巨人腰带</Name>
+		<Price>1000</Price>
+		<HP>380</HP>
+	</Clothes>
+	<Clothes>
+		<Name>狂徒铠甲</Name>
+		<Price>2850</Price>
+		<HP>800</HP>
+	</Clothes>
+</Root>

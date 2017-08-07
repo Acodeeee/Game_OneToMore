@@ -9,7 +9,7 @@ namespace Game_OneToMore
 
 		//响应Player的攻击事件
 		public override void F_Attack (object o, EventArgs e){
-			Thread.Sleep(800);
+			Thread.Sleep(500);
 			if (o is Player && e is Skill && e != null) {
 				Player p = (Player)o;
 				Skill s = (Skill)e;
